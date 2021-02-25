@@ -1,27 +1,29 @@
 package ch.chregu.migros;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.chregu.migros.data.JsonConverter;
 import ch.chregu.migros.data.JsonReader;
-import ch.chregu.migros.data.datatypes.Club;
+import ch.chregu.migros.data.datatypes.ClubList;
 
 public class MigrosAnalyzer {
 
 	public static void main(String[] args) throws IOException, JSONException {
 
-		String initalURL = "https://supportyoursport.migros.ch/api/v1/frontend/leaderboard/?group=big&limit=90000";
+		String initalURL = "https://supportyoursport.migros.ch/api/v1/frontend/leaderboard/?group=big&limit=10000";
 
 		JSONObject json = JsonReader.readJSONFromURL(initalURL);
 
-		List<Club> clubliste = new JsonConverter().getClublistFromJson(json);
+		ClubList clubliste = new JsonConverter().getClublistFromJson(json);
 
-		System.out.println("Total Vouchers: " + clubliste.stream().mapToInt(Club::getVouchers).sum());
+		System.out.println("Money per Voucher: " + clubliste.getMoneyPerVoucher());
 
-		clubliste.stream().filter(c -> c.getName().equals("Sportclub Nebikon")).forEach(System.out::println);
+		clubliste.stream().filter(club -> club.getName().equals("Sportclub Nebikon")).forEach(club -> {
+			System.out.print(club);
+			System.out.println(" ==> " + clubliste.getMoneyPerVoucher() * club.getVouchers());
+		});
 	}
 }
