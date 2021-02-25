@@ -5,4 +5,14 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>MigrosSupportYourSportAnalyzer</name>
   <description>Analyzer for Migros SupportYourSport</description>
+  
+  <!-- https://mvnrepository.com/artifact/org.json/json -->
+
+<dependencies>
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20201115</version>
+</dependency>
+  </dependencies>
 </project>
