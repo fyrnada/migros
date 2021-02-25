@@ -1,4 +1,4 @@
-package ch.chregu.migros.datatypes;
+package ch.chregu.migros.data.datatypes;
 
 public class Club {
 
@@ -17,6 +17,11 @@ public class Club {
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public String toString() {
+		return getName() + ":\t" + getVouchers();
 	}
 
 }

@@ -1,4 +1,4 @@
-package ch.chregu.migros.datatypes;
+package ch.chregu.migros.data.datatypes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
