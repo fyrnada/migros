@@ -19,9 +19,8 @@ public class MigrosAnalyzer {
 	private static String organisationURL = "https://supportyoursport.migros.ch/api/v1/frontend/organisationfinder/?query=%s";
 
 	public static void main(String[] args) throws IOException, JSONException {
-		Map<String, String> numberOfTeams = getNumberOfTeams();
 
-		VoucherValueCalculator vvc = initializeVVC(numberOfTeams);
+		VoucherValueCalculator vvc = initializeVVC();
 
 		JSONObject orgJson = JsonReader.readJSONFromURL(String.format(organisationURL, "Nebikon"));
 		List<Club> clubsFromQuery = JsonConverter.getClubsFromQuery(orgJson);
@@ -31,7 +30,9 @@ public class MigrosAnalyzer {
 		});
 	}
 
-	private static VoucherValueCalculator initializeVVC(Map<String, String> numberOfTeams) {
+	private static VoucherValueCalculator initializeVVC() {
+
+		Map<String, String> numberOfTeams = getNumberOfTeams();
 
 		VoucherValueCalculator vvc = new VoucherValueCalculator();
 
