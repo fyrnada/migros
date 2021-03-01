@@ -1,6 +1,10 @@
 package ch.chregu.migros;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,12 +26,32 @@ public class MigrosAnalyzer {
 
 		VoucherValueCalculator vvc = initializeVVC();
 
-		JSONObject orgJson = JsonReader.readJSONFromURL(String.format(organisationURL, "Nebikon"));
-		List<Club> clubsFromQuery = JsonConverter.getClubsFromQuery(orgJson);
+		List<String> clubsOfInterest = getClubsOfInterest();
+
+		List<Club> clubsFromQuery = new ArrayList<>();
+
+		clubsOfInterest.forEach(c -> {
+			JSONObject orgJson = JsonReader.readJSONFromURL(String.format(organisationURL, c));
+			clubsFromQuery.addAll(JsonConverter.getClubsFromQuery(orgJson));
+		});
 
 		clubsFromQuery.forEach(c -> {
 			System.out.println(c.toString() + "\t" + vvc.getValueforClub(c));
 		});
+	}
+
+	private static List<String> getClubsOfInterest() {
+		List<String> clubList = new ArrayList<>();
+
+		try (BufferedReader br = Files.newBufferedReader(Paths.get("Clubs"))) {
+			br.lines().forEach(c -> {
+				clubList.add(c.replaceAll(" ", "%20"));
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return clubList;
 	}
 
 	private static VoucherValueCalculator initializeVVC() {
