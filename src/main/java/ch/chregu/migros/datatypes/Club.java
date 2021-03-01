@@ -3,10 +3,10 @@ package ch.chregu.migros.datatypes;
 public class Club {
 
 	private String name;
-	private String category;
+	private Category category;
 	private int vouchers;
 
-	public Club(String clubName, String category, int vouchers) {
+	public Club(String clubName, Category category, int vouchers) {
 		this.name = clubName;
 		this.category = category;
 		this.vouchers = vouchers;
@@ -20,13 +20,13 @@ public class Club {
 		return name;
 	}
 
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
 
 	@Override
 	public String toString() {
-		return getName() + "\tKategorie " + getCategory() + "\tBons " + getVouchers();
+		return getName() + "\tKategorie " + getCategory().label + "\tBons " + getVouchers();
 	}
 
 }

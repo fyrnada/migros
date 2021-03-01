@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import ch.chregu.migros.datatypes.Category;
 import ch.chregu.migros.datatypes.Club;
 
 public class JsonConverter {
@@ -34,7 +35,7 @@ public class JsonConverter {
 		String category = clubJson.get("group").toString();
 		int vouchers = Integer.parseInt(clubJson.get("totalVoucherCount").toString());
 
-		return new Club(clubName, category, vouchers);
+		return new Club(clubName, Category.valueOfLabel(category), vouchers);
 	}
 
 }

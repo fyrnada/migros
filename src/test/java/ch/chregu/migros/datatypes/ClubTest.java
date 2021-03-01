@@ -10,7 +10,7 @@ class ClubTest {
 	private Club club;
 	private int vouchers = 12;
 	private String clubName = "testClub";
-	private String category = "C";
+	private Category category = Category.medium;
 
 	@BeforeEach
 	void initTest() {

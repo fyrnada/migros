@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +17,7 @@ import org.json.JSONObject;
 import ch.chregu.migros.business.VoucherValueCalculator;
 import ch.chregu.migros.data.JsonConverter;
 import ch.chregu.migros.data.JsonReader;
+import ch.chregu.migros.datatypes.Category;
 import ch.chregu.migros.datatypes.Club;
 
 public class MigrosAnalyzer {
@@ -44,9 +47,7 @@ public class MigrosAnalyzer {
 		List<String> clubList = new ArrayList<>();
 
 		try (BufferedReader br = Files.newBufferedReader(Paths.get("Clubs"))) {
-			br.lines().forEach(c -> {
-				clubList.add(c.replaceAll(" ", "%20"));
-			});
+			clubList = br.lines().map(c -> c.replaceAll(" ", "%20")).collect(Collectors.toList());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -56,34 +57,29 @@ public class MigrosAnalyzer {
 
 	private static VoucherValueCalculator initializeVVC() {
 
-		Map<String, String> numberOfTeams = getNumberOfTeams();
+		Map<Category, String> numberOfTeams = getNumberOfTeams();
 
 		VoucherValueCalculator vvc = new VoucherValueCalculator();
 
-		JSONObject json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "small", numberOfTeams.get("A")));
-		vvc.addClubs(JsonConverter.getClublistFromJson(json));
+		Stream.of(Category.values()).forEach(cat -> {
+			JSONObject json = JsonReader
+					.readJSONFromURL(String.format(leaderboardURL, cat.name(), numberOfTeams.get(cat)));
+			vvc.addClubs(JsonConverter.getClublistFromJson(json), cat);
 
-		json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "medium", numberOfTeams.get("B")));
-		vvc.addClubs(JsonConverter.getClublistFromJson(json));
-
-		json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "big", numberOfTeams.get("C")));
-		vvc.addClubs(JsonConverter.getClublistFromJson(json));
+		});
 
 		return vvc;
 
 	}
 
-	private static Map<String, String> getNumberOfTeams() {
-		HashMap<String, String> hashMap = new HashMap<>();
+	private static Map<Category, String> getNumberOfTeams() {
+		HashMap<Category, String> hashMap = new HashMap<>();
 
-		JSONObject json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "small", "0"));
-		hashMap.put("A", json.get("totalCount").toString());
+		Stream.of(Category.values()).forEach(cat -> {
+			JSONObject json = JsonReader.readJSONFromURL(String.format(leaderboardURL, cat.name(), "0"));
+			hashMap.put(cat, json.get("totalCount").toString());
 
-		json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "medium", "0"));
-		hashMap.put("B", json.get("totalCount").toString());
-
-		json = JsonReader.readJSONFromURL(String.format(leaderboardURL, "big", "0"));
-		hashMap.put("C", json.get("totalCount").toString());
+		});
 
 		return hashMap;
 	}

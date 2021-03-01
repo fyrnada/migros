@@ -2,41 +2,51 @@ package ch.chregu.migros.business;
 
 import java.util.List;
 
+import ch.chregu.migros.datatypes.Category;
 import ch.chregu.migros.datatypes.Club;
 
 public class VoucherValueCalculator {
 
-	private double amountA, amountB, amountC;
+	private double amountSmall, amountMedium, amountBig;
 
-	public void addClubs(List<Club> clublist) {
-		clublist.forEach(this::addClub);
-	}
-
-	private void addClub(Club club) {
-		switch (club.getCategory()) {
-			case "A" :
-				amountA += club.getVouchers();
+	public void addClubs(List<Club> clublist, Category category) {
+		switch (category) {
+			case small :
+				clublist.stream().mapToInt(Club::getVouchers).forEach(this::addAmountCategroySmall);
 				break;
-			case "B" :
-				amountB += club.getVouchers();
+			case medium :
+				clublist.stream().mapToInt(Club::getVouchers).forEach(this::addAmountCategroyMedium);
 				break;
-			case "C" :
-				amountC += club.getVouchers();
+			case big :
+				clublist.stream().mapToInt(Club::getVouchers).forEach(this::addAmountCategroyBig);
 				break;
 		}
+
+	}
+
+	private void addAmountCategroySmall(double amount) {
+		amountSmall += amount;
+	}
+
+	private void addAmountCategroyMedium(double amount) {
+		amountMedium += amount;
+	}
+
+	private void addAmountCategroyBig(double amount) {
+		amountBig += amount;
 	}
 
 	public double getValueforClub(Club club) {
 		double moneyPerVoucher;
 		switch (club.getCategory()) {
-			case "A" :
-				moneyPerVoucher = 1000000 / amountA;
+			case small :
+				moneyPerVoucher = 1000000 / amountSmall;
 				break;
-			case "B" :
-				moneyPerVoucher = 1000000 / amountB;
+			case medium :
+				moneyPerVoucher = 1000000 / amountMedium;
 				break;
-			case "C" :
-				moneyPerVoucher = 1000000 / amountC;
+			case big :
+				moneyPerVoucher = 1000000 / amountBig;
 				break;
 			default :
 				moneyPerVoucher = 0;
