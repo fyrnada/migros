@@ -19,7 +19,7 @@ class ClubTest {
 
 	@Test
 	void testGetName() {
-		assertEquals(clubName, club.getName());
+		assertEquals(clubName, club.getCategory());
 	}
 
 	@Test
