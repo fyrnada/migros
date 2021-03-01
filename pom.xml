@@ -6,14 +6,17 @@
   <name>MigrosSupportYourSportAnalyzer</name>
   <description>Analyzer for Migros SupportYourSport</description>
   
-  <!-- https://mvnrepository.com/artifact/org.json/json -->
+	<dependencies>
+		<dependency>
+    		<groupId>org.json</groupId>
+    		<artifactId>json</artifactId>
+    		<version>20201115</version>
+		</dependency>
+	</dependencies>
 
-<dependencies>
-<dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20201115</version>
-</dependency>
-<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-</dependencies>
+<properties>
+   <maven.compiler.source>1.8</maven.compiler.source>
+   <maven.compiler.target>1.8</maven.compiler.target>
+</properties>
+
 </project>
