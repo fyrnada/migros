@@ -24,7 +24,7 @@ class ClubTest {
 
 	@Test
 	void testGetVouchers() {
-		assertEquals(13, club.getVouchers());
+		assertEquals(vouchers, club.getVouchers());
 	}
 
 	@Test
